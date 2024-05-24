@@ -36,13 +36,20 @@ async function fetchNewsQuery(query) {
 function displayBlogs(articles) {
     blogContainer.innerHTML = ""; // Clear any existing content in the blog container
 
+    if (!Array.isArray(articles) || articles.length === 0) {
+        const message = document.createElement("p");
+        message.textContent = "No articles available.";
+        blogContainer.appendChild(message);
+        return;
+    }
+
     // Iterate through each article and create a blog card
     articles.forEach((article) => {
         const blogCard = document.createElement("div");
         blogCard.classList.add("blog-card");
 
         const img = document.createElement("img");
-        img.src = article.urlToImage; // Set the image source
+        img.src = article.urlToImage || "placeholder-image-url.jpg"; // Set the image source or placeholder
         img.alt = article.title; // Set the image alt text
 
         const title = document.createElement("h2");
