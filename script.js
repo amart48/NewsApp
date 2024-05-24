@@ -11,6 +11,9 @@ async function fetchRandomNews() {
     try {
         const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=${apikey}`;
         const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         return data.articles || []; // Return articles from the response or an empty array
     } catch (error) {
@@ -24,6 +27,9 @@ async function fetchNewsQuery(query) {
     try {
         const apiUrl = `https://newsapi.org/v2/everything?q=${query}&pageSize=10&apiKey=${apikey}`;
         const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         return data.articles || []; // Return articles from the response or an empty array
     } catch (error) {
