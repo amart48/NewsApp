@@ -14,6 +14,9 @@ async function fetchRandomNews() {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+        if (response.status === 426) {
+            throw new Error("NewsAPI is not available on GitHub Pages with a free API key.");
+        }
         const data = await response.json();
         return data.articles || []; // Return articles from the response or an empty array
     } catch (error) {
