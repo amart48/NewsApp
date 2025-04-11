@@ -8,37 +8,36 @@ const searchButton = document.getElementById("search-button");
 
 // Function to fetch top headlines from the NewsAPI
 async function fetchRandomNews() {
-    try {
-        const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=${apikey}`;
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        if (response.status === 426) {
-            throw new Error("NewsAPI is not available on GitHub Pages with a free API key.");
-        }
-        const data = await response.json();
-        return data.articles || []; // Return articles from the response or an empty array
-    } catch (error) {
-        console.error("Error fetching random news", error);
-        return []; // Return an empty array in case of error
+    const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=${apikey}`;
+    const response = await fetch(apiUrl);
+
+    if (response.status === 426) {
+        throw new Error("NewsAPI is not available on GitHub Pages with a free API key.");
     }
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.articles || [];
 }
 
 // Function to fetch news based on a search query from the NewsAPI
 async function fetchNewsQuery(query) {
-    try {
-        const apiUrl = `https://newsapi.org/v2/everything?q=${query}&pageSize=10&apiKey=${apikey}`;
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data.articles || []; // Return articles from the response or an empty array
-    } catch (error) {
-        console.error("Error fetching news by query", error);
-        return []; // Return an empty array in case of error
+    const apiUrl = `https://newsapi.org/v2/everything?q=${query}&pageSize=10&apiKey=${apikey}`;
+    const response = await fetch(apiUrl);
+
+    if (response.status === 426) {
+        throw new Error("NewsAPI is not available on GitHub Pages with a free API key.");
     }
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.articles || [];
 }
 
 // Function to display the news articles on the web page
@@ -92,13 +91,14 @@ function displayBlogs(articles) {
 
 // Event listener for the search button click event
 searchButton.addEventListener("click", async () => {
-    const query = searchField.value.trim(); // Get the trimmed search query
+    const query = searchField.value.trim();
     if (query !== "") {
         try {
-            const articles = await fetchNewsQuery(query); // Fetch news based on the query
-            displayBlogs(articles); // Display the fetched articles
+            const articles = await fetchNewsQuery(query);
+            displayBlogs(articles);
         } catch (error) {
-            console.log("Error fetching news by query", error);
+            console.error("Error fetching news by query:", error);
+            blogContainer.innerHTML = `<p style="color: red; font-weight: bold;">${error.message}</p>`;
         }
     }
 });
@@ -106,9 +106,10 @@ searchButton.addEventListener("click", async () => {
 // Immediately invoked function to fetch and display random news articles on page load
 (async () => {
     try {
-        const articles = await fetchRandomNews(); // Fetch random news
-        displayBlogs(articles); // Display the fetched articles
+        const articles = await fetchRandomNews();
+        displayBlogs(articles);
     } catch (error) {
-        console.error("Error fetching random news", error);
+        console.error("Error fetching random news:", error);
+        blogContainer.innerHTML = `<p style="color: red; font-weight: bold;">${error.message}</p>`;
     }
 })();
