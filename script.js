@@ -110,6 +110,6 @@ searchButton.addEventListener("click", async () => {
         displayBlogs(articles);
     } catch (error) {
         console.error("Error fetching random news:", error);
-        blogContainer.innerHTML = `<p style="color: red; font-weight: bold;">${error.message}</p>`;
+        blogContainer.innerHTML = `<p style="font-weight: bold;">${error.message}</p>`;
     }
 })();
